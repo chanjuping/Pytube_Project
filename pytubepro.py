@@ -27,10 +27,10 @@ def download(url, quality="high", folder="PytubeVideos"):
         print(Fore.YELLOW + '\nDownloading...')
         file_name = f"{title}_{quality}.{subtype}"
         stream.download(folder, filename=file_name)
-        print(Fore.GREEN + f'\nDownload success! Saved to {folder}/{file_name}')
+        print(Fore.GREEN + f'\nSuccess! Saved to {folder}/{file_name}')
         return True
     except Exception as e:
-        print(Fore.RED + f'\nAn error has occurred: {e}\nPlease try again.')
+        print(Fore.RED + f'\nError: {e}\nPlease try again.')
         return False
 
 def main():
