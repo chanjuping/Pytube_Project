@@ -3,21 +3,24 @@ from pytube import YouTube
 from colorama import init, Fore
 
 init(autoreset=True)
+print(Fore.BLUE + 'PytubePro v1.0')
 
-def clear():
-    os.system('cls' if os.name == 'nt' else 'clear')
+def clear(): os.system('cls' if os.name == 'nt' else 'clear')
 
-def download_video(url, quality_pref="high", folder="PytubeVideos"):
+def get_input():
+    return input(Fore.CYAN + 'Insert URL: '), input(Fore.CYAN + 'Quality (high/low/720p/1080p, etc.): ')
+
+def download(url, quality="highest", folder="PytubeVideos"):
     try:
         yt = YouTube(url)
-        stream = (yt.streams.get_highest_resolution() if quality_pref == "high"
-                  else yt.streams.get_lowest_resolution() if quality_pref == "low"
-                  else yt.streams.filter(res=quality_pref).first())
+        stream = (yt.streams.get_highest_resolution() if quality == "high"
+                  else yt.streams.get_lowest_resolution() if quality == "low"
+                  else yt.streams.filter(res=quality).first())
 
         os.makedirs(folder, exist_ok=True)
-        title = yt.title.replace(' ', '_')
+        title, subtype = yt.title.replace(' ', '_'), stream.subtype
         print(Fore.YELLOW + '\nDownloading...')
-        file_name = f"{title}_{quality_pref}.{stream.subtype}"
+        file_name = f"{title}_{quality}.{subtype}"
         stream.download(folder, filename=file_name)
         print(Fore.GREEN + f'\nSuccess! Saved to {folder}/{file_name}')
         return True
@@ -27,13 +30,10 @@ def download_video(url, quality_pref="high", folder="PytubeVideos"):
 
 def main():
     clear()
+    url, quality = get_input()
 
-    while True:
-        url = input(Fore.CYAN + 'YouTube URL: ')
-        quality = input(Fore.CYAN + '\nQuality (high/low/720p/1080p, etc.): ')
-
-        if download_video(url, quality):
-            break
+    while not download(url, quality):
+        pass
 
 if __name__ == "__main__":
     main()
