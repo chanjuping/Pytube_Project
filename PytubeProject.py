@@ -4,6 +4,9 @@ from colorama import init, Fore
 
 init(autoreset=True)
 
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def get_user_input():
     url = input(Fore.CYAN + 'Insert URL: ')
     quality_preference = input(Fore.CYAN + 'Enter video quality preference (highest/lowest/720p/1080p, etc.): ')
@@ -12,8 +15,6 @@ def get_user_input():
 def download_video(url, quality="highest", folder="PytubeVideos"):
     try:
         youtube = YouTube(url)
-        print(f'Downloading link: {url}')
-        print(f'Downloading video: {youtube.title}')
 
         # Get the appropriate stream based on quality preference
         if quality == "highest":
@@ -26,9 +27,12 @@ def download_video(url, quality="highest", folder="PytubeVideos"):
         # Create the folder if it doesn't exist
         os.makedirs(folder, exist_ok=True)
 
+        # Replace spaces with underscores in the video title
+        video_title = youtube.title.replace(' ', '_')
+
         # Download the selected stream to the specified destination or the current working directory
-        video_stream.download(folder)
-        print(Fore.GREEN + f'Download success! Saved to {folder}/')
+        video_stream.download(folder, filename=video_title)
+        print(Fore.GREEN + f'Download success! Saved to {folder}/{video_title}')
         return True
     except Exception as e:
         print(Fore.RED + f'An error has occurred: {e}\nPlease try again.')
@@ -40,6 +44,8 @@ def show_progress(stream, chunk, file_handle, bytes_remaining):
     print(f"\rDownloading... {percent:.1f}%", end='', flush=True)
 
 def main():
+    clear_terminal()
+
     while True:
         url, quality = get_user_input()
 
