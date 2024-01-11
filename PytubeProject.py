@@ -31,17 +31,24 @@ def download_video(url, quality="highest", folder="PytubeVideos"):
         video_title = youtube.title.replace(' ', '_')
 
         # Download the selected stream to the specified destination or the current working directory
-        video_stream.download(folder, filename=video_title, on_progress_callback=show_progress)
+        video_stream.download(folder, filename=video_title)
+
         print(Fore.GREEN + f'\nDownload success! Saved to {folder}/{video_title}')
         return True
     except Exception as e:
         print(Fore.RED + f'An error has occurred: {e}\nPlease try again.')
         return False
 
-def show_progress(stream, chunk, file_handle, bytes_remaining):
-    # Display download progress in percentage
-    percent = (100 * (stream.filesize - bytes_remaining)) / stream.filesize
-    print(f"\rDownloading... {percent:.1f}%", end='', flush=True)
+def show_progress(file_path):
+    while os.path.exists(file_path):
+        file_size = os.path.getsize(file_path)
+        total_size = video_stream.filesize  # Assuming video_stream is a global variable
+
+        if total_size:
+            percent = (file_size / total_size) * 100
+            print(f"\rDownloading... {percent:.1f}%", end='', flush=True)
+        else:
+            break
 
 def main():
     clear_terminal()
@@ -49,9 +56,17 @@ def main():
     while True:
         url, quality = get_user_input()
 
-        # Download video and check if successful
-        if download_video(url, quality):
-            break
+        try:
+            global video_stream
+            video_stream = YouTube(url).streams.filter(progressive=True, file_extension='mp4').first()
+            video_stream.download()
+            show_progress(video_stream.title + ".mp4")
+        except Exception as e:
+            print(Fore.RED + f'An error has occurred: {e}\nPlease try again.')
+            continue
+
+        print(Fore.GREEN + f'\nDownload success! Saved to {os.getcwd()}')
+        break
 
 if __name__ == "__main__":
     main()
