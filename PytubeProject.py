@@ -39,34 +39,15 @@ def download_video(url, quality="highest", folder="PytubeVideos"):
         print(Fore.RED + f'An error has occurred: {e}\nPlease try again.')
         return False
 
-def show_progress(file_path):
-    while os.path.exists(file_path):
-        file_size = os.path.getsize(file_path)
-        total_size = video_stream.filesize  # Assuming video_stream is a global variable
-
-        if total_size:
-            percent = (file_size / total_size) * 100
-            print(f"\rDownloading... {percent:.1f}%", end='', flush=True)
-        else:
-            break
-
 def main():
     clear_terminal()
 
     while True:
         url, quality = get_user_input()
 
-        try:
-            global video_stream
-            video_stream = YouTube(url).streams.filter(progressive=True, file_extension='mp4').first()
-            video_stream.download()
-            show_progress(video_stream.title + ".mp4")
-        except Exception as e:
-            print(Fore.RED + f'An error has occurred: {e}\nPlease try again.')
-            continue
-
-        print(Fore.GREEN + f'\nDownload success! Saved to {os.getcwd()}')
-        break
+        # Download video and check if successful
+        if download_video(url, quality):
+            break
 
 if __name__ == "__main__":
     main()
