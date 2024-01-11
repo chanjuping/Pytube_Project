@@ -4,9 +4,9 @@ from colorama import init, Fore
 init(autoreset=True)
 
 def get_user_input():
-    url = input('Insert URL: ')
-    quality_preference = input('Enter video quality preference (highest/lowest/720p/1080p, etc.): ')
-    destination = input('Enter custom download destination (press Enter for current directory): ')
+    url = input(Fore.CYAN + 'Insert URL: ')
+    quality_preference = input(Fore.CYAN + 'Enter video quality preference (highest/lowest/720p/1080p, etc.): ')
+    destination = input(Fore.CYAN + 'Enter custom download destination (press Enter for current directory): ')
     return url, quality_preference, destination
 
 def download_video(url, quality="highest", destination=""):
@@ -43,7 +43,7 @@ def main():
         # Download video and check if successful
         if download_video(url, quality, custom_destination):
             # Ask the user if they want to continue or exit
-            quit_continue = input('Would you like to continue? (Y)es/(N)o \n> ').lower()
+            quit_continue = input(Fore.YELLOW + 'Would you like to continue? (Y)es/(N)o \n> ').lower()
 
             if quit_continue == 'n':
                 print(Fore.CYAN + 'Thank you for using our program. Have a nice day!')
