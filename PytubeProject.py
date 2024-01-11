@@ -3,14 +3,19 @@ from pytube import YouTube
 from colorama import init, Fore
 
 init(autoreset=True)
-print(Fore.BLUE + 'PytubePro v1.0')
 
-def clear(): os.system('cls' if os.name == 'nt' else 'clear')
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+clear()
+print(Fore.BLUE + 'PytubePro')
 
 def get_input():
-    return input(Fore.CYAN + 'Insert URL: '), input(Fore.CYAN + 'Quality (high/low/720p/1080p, etc.): ')
+    return input(Fore.CYAN + '\nYouTube URL: '), input(Fore.CYAN + 'Quality (high/low/720p/1080p, etc.): ')
 
-def download(url, quality="highest", folder="PytubeVideos"):
+url, quality = get_input()
+
+def download(url, quality="high", folder="PytubeVideos"):
     try:
         yt = YouTube(url)
         stream = (yt.streams.get_highest_resolution() if quality == "high"
@@ -22,16 +27,13 @@ def download(url, quality="highest", folder="PytubeVideos"):
         print(Fore.YELLOW + '\nDownloading...')
         file_name = f"{title}_{quality}.{subtype}"
         stream.download(folder, filename=file_name)
-        print(Fore.GREEN + f'\nSuccess! Saved to {folder}/{file_name}')
+        print(Fore.GREEN + f'\nDownload success! Saved to {folder}/{file_name}')
         return True
     except Exception as e:
         print(Fore.RED + f'\nAn error has occurred: {e}\nPlease try again.')
         return False
 
 def main():
-    clear()
-    url, quality = get_input()
-
     while not download(url, quality):
         pass
 
