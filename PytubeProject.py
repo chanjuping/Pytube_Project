@@ -31,9 +31,9 @@ def download_video(url, quality="highest", folder="PytubeVideos"):
         video_title = youtube.title.replace(' ', '_')
 
         # Download the selected stream to the specified destination or the current working directory
-        video_stream.download(folder, filename=video_title)
+        video_stream.download(folder, filename=video_title + '.' + video_stream.subtype)
 
-        print(Fore.GREEN + f'\nDownload success! Saved to {folder}/{video_title}')
+        print(Fore.GREEN + f'\nDownload success! Saved to {folder}/{video_title}.{video_stream.subtype}')
         return True
     except Exception as e:
         print(Fore.RED + f'An error has occurred: {e}\nPlease try again.')
