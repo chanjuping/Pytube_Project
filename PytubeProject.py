@@ -21,7 +21,7 @@ def download_video(url, quality="highest", destination=""):
             video_stream = youtube.streams.filter(res=quality).first()
 
         # Download the selected stream to the specified destination or the current working directory
-        video_stream.download(destination, on_progress_callback=show_progress)
+        video_stream.download(destination)
         print('\nDownload success!')
         return True
     except Exception as e:
