@@ -9,14 +9,13 @@ def clear_terminal():
 
 def get_user_input():
     url = input(Fore.CYAN + 'YouTube URL: ')
-    quality_preference = input(Fore.CYAN + 'Quality (high/low/720p/1080p): ')
+    quality_preference = input(Fore.CYAN + 'Quality (high/low/720p/1080p, etc.): ')
     return url, quality_preference
 
-def download_video(url, quality="high", folder="PytubeVideos"):
+def download_video(url, quality="highest", folder="PytubeVideos"):
     try:
         youtube = YouTube(url)
 
-        # Get the appropriate stream based on quality preference
         if quality == "high":
             video_stream = youtube.streams.get_highest_resolution()
         elif quality == "low":
@@ -24,18 +23,19 @@ def download_video(url, quality="high", folder="PytubeVideos"):
         else:
             video_stream = youtube.streams.filter(res=quality).first()
 
-        # Create the folder if it doesn't exist
         os.makedirs(folder, exist_ok=True)
 
-        # Replace spaces with underscores in the video title
         video_title = youtube.title.replace(' ', '_')
 
         print(Fore.YELLOW + 'Downloading...')
 
-        # Download the selected stream to the specified destination or the current working directory
-        video_stream.download(folder, filename=video_title + '.' + video_stream.subtype)
+        file_extension = video_stream.subtype
+        video_quality_name = quality.replace('/', '_').replace(' ', '_')
+        video_title_with_quality = f"{video_title}_{video_quality_name}.{file_extension}"
 
-        print(Fore.GREEN + f'\nSucess! Saved to {folder}/{video_title}.{video_stream.subtype}')
+        video_stream.download(folder, filename=video_title_with_quality)
+
+        print(Fore.GREEN + f'\nDownload success! Saved to {folder}/{video_title_with_quality}')
         return True
     except Exception as e:
         print(Fore.RED + f'An error has occurred: {e}\nPlease try again.')
@@ -47,7 +47,6 @@ def main():
     while True:
         url, quality = get_user_input()
 
-        # Download video and check if successful
         if download_video(url, quality):
             break
 
