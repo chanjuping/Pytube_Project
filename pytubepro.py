@@ -1,35 +1,29 @@
 import os
 from pytube import YouTube
-from colorama import init, Fore
-
-init(autoreset=True)
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-clear()
-print(Fore.BLUE + 'PytubePro')
-
-url = input(Fore.CYAN + '\nYouTube URL: ')
-quality = input(Fore.CYAN + '\nQuality (high/low/720p/1080p, etc.): ')
-
-def download(url, quality="high", folder="PytubeVideos"):
+def download_video(url, quality="high", folder="PytubeVideos"):
     try:
         yt = YouTube(url)
-        stream = (yt.streams.get_highest_resolution() if quality == "high"
-                  else yt.streams.get_lowest_resolution() if quality == "low"
-                  else yt.streams.filter(res=quality).first())
+        stream = yt.streams.get_highest_resolution() if quality == "high" else yt.streams.filter(res=quality).first() or yt.streams.filter(res="360p").first()
 
         os.makedirs(folder, exist_ok=True)
-        title, subtype = yt.title.replace(' ', '_'), stream.subtype
-        print(Fore.YELLOW + '\nDownloading...')
-        file_name = f"{title}_{quality}.{subtype}"
+        file_name = f"{yt.title.replace(' ', '_')}_{quality}.{stream.subtype}"
+
+        print('\nDownloading...')
         stream.download(folder, filename=file_name)
-        print(Fore.GREEN + f'\nSuccess! Saved to {folder}/{file_name}')
+
+        print(f'\nSuccess! Saved to {folder}/{file_name}')
         return True
     except Exception as e:
-        print(Fore.RED + f'\nError: {e}\nPlease try again.')
+        print(f'\nError: {e}\nPlease try again.')
         return False
 
-while not download(url, quality):
-    pass
+if __name__ == "__main__":
+    clear()
+    print('PytubePro')
+
+    while not download_video(input('\nYouTube URL: '), input('\nQuality (high/low/720p/1080p, etc.):')):
+        pass
