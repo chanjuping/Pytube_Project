@@ -1,23 +1,57 @@
 from pytube import YouTube
-while True:
-    #For user to insert video's url
-    input_url = (input('Insert url: '))
-    #Displaying an error if the provided url isn't valid
+
+def get_user_input():
+    url = input('Insert URL: ')
+    quality_preference = input('Enter video quality preference (highest/lowest/720p/1080p, etc.): ')
+    destination = input('Enter custom download destination (press Enter for current directory): ')
+    return url, quality_preference, destination
+
+def download_video(url, quality="highest", destination=""):
     try:
-        youtube = YouTube(input_url)
-        print(f'Downloading link: {input_url}')
+        youtube = YouTube(url)
+        print(f'Downloading link: {url}')
         print(f'Downloading video: {youtube.title}')
-    except:
-        print('An error has occurred, please try again.\n')
-        continue
-    #To download video, followed up by the destination of the download
-    youtube.streams.first().download("")
-    print('Download success!')
-    #Asking the user whether they would like to continue or not
-    quit_continue = (input('Would you like to continue? (Y)es/(N)o \n> ')).lower()
-    if quit_continue == 'n':
-        print('Thank you for using our programme, have a nice day!')
-        break
-    elif quit_continue == 'y':
-        print('')
-        continue
+
+        # Get the appropriate stream based on quality preference
+        if quality == "highest":
+            video_stream = youtube.streams.get_highest_resolution()
+        elif quality == "lowest":
+            video_stream = youtube.streams.get_lowest_resolution()
+        else:
+            video_stream = youtube.streams.filter(res=quality).first()
+
+        # Download the selected stream to the specified destination or the current working directory
+        video_stream.download(destination, on_progress_callback=show_progress)
+        print('\nDownload success!')
+        return True
+    except Exception as e:
+        print(f'An error has occurred: {e}\nPlease try again.')
+        return False
+
+def show_progress(stream, chunk, file_handle, bytes_remaining):
+    # Display download progress in percentage
+    percent = (100 * (stream.filesize - bytes_remaining)) / stream.filesize
+    print(f"\rDownloading... {percent:.1f}%", end='', flush=True)
+
+def main():
+    while True:
+        url, quality, custom_destination = get_user_input()
+
+        # Download video and check if successful
+        if download_video(url, quality, custom_destination):
+            # Ask the user if they want to continue or exit
+            quit_continue = input('Would you like to continue? (Y)es/(N)o \n> ').lower()
+
+            if quit_continue == 'n':
+                print('Thank you for using our program. Have a nice day!')
+                break
+            elif quit_continue == 'y':
+                print('')
+                continue
+            else:
+                # Handle invalid input
+                print('Invalid input. Please enter either "Y" or "N".\n')
+                continue
+
+if __name__ == "__main__":
+    main()
