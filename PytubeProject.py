@@ -4,48 +4,34 @@ from colorama import init, Fore
 
 init(autoreset=True)
 
-def clear_terminal():
+def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def get_user_input():
-    url = input(Fore.CYAN + 'YouTube URL: ')
-    quality_preference = input(Fore.CYAN + 'Quality (high/low/720p/1080p, etc.): ')
-    return url, quality_preference
-
-def download_video(url, quality="highest", folder="PytubeVideos"):
+def download_video(url, quality_pref="highest", folder="PytubeVideos"):
     try:
-        youtube = YouTube(url)
-
-        if quality == "high":
-            video_stream = youtube.streams.get_highest_resolution()
-        elif quality == "low":
-            video_stream = youtube.streams.get_lowest_resolution()
-        else:
-            video_stream = youtube.streams.filter(res=quality).first()
+        yt = YouTube(url)
+        stream = yt.streams.get_highest_resolution() if quality_pref == "highest" else \
+                 yt.streams.get_lowest_resolution() if quality_pref == "lowest" else \
+                 yt.streams.filter(res=quality_pref).first()
 
         os.makedirs(folder, exist_ok=True)
-
-        video_title = youtube.title.replace(' ', '_')
-
-        print(Fore.YELLOW + 'Downloading...')
-
-        file_extension = video_stream.subtype
-        video_quality_name = quality.replace('/', '_').replace(' ', '_')
-        video_title_with_quality = f"{video_title}_{video_quality_name}.{file_extension}"
-
-        video_stream.download(folder, filename=video_title_with_quality)
-
-        print(Fore.GREEN + f'\nDownload success! Saved to {folder}/{video_title_with_quality}')
+        title = yt.title.replace(' ', '_')
+        print(Fore.YELLOW + 'Downloading video...')
+        file_extension = stream.subtype
+        file_name = f"{title}_{quality_pref}.{file_extension}"
+        stream.download(folder, filename=file_name)
+        print(Fore.GREEN + f'\nDownload success! Saved to {folder}/{file_name}')
         return True
     except Exception as e:
         print(Fore.RED + f'An error has occurred: {e}\nPlease try again.')
         return False
 
 def main():
-    clear_terminal()
+    clear()
 
     while True:
-        url, quality = get_user_input()
+        url = input(Fore.CYAN + 'Insert URL: ')
+        quality = input(Fore.CYAN + 'Enter video quality preference (highest/lowest/720p/1080p, etc.): ')
 
         if download_video(url, quality):
             break
