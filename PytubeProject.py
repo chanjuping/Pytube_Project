@@ -22,7 +22,7 @@ def download_video(url, quality_pref="high", folder="PytubeVideos"):
         print(Fore.GREEN + f'\nSuccess! Saved to {folder}/{file_name}')
         return True
     except Exception as e:
-        print(Fore.RED + f'An error has occurred: {e}\nPlease try again.')
+        print(Fore.RED + f'\nAn error has occurred: {e}\nPlease try again.')
         return False
 
 def main():
@@ -30,7 +30,7 @@ def main():
 
     while True:
         url = input(Fore.CYAN + 'YouTube URL: ')
-        quality = input(Fore.CYAN + '\nQuality (highest/lowest/720p/1080p, etc.): ')
+        quality = input(Fore.CYAN + '\nQuality (high/low/720p/1080p, etc.): ')
 
         if download_video(url, quality):
             break
