@@ -1,6 +1,12 @@
 # PytubePro
 
-PytubePro is a simple Python script designed for effortless YouTube video downloads. With a straightforward command-line interface, users can specify the desired video quality and conveniently save their favorite content to their local machine. Enjoy hassle-free downloads with PytubePro!
+PytubePro is a simple Python script designed for effortless YouTube video downloads.
+
+[![Ceasefire Now](https://badge.techforpalestine.org/default)](https://techforpalestine.org/learn-more)
+
+[![StandWithPalestine](https://raw.githubusercontent.com/Safouene1/support-palestine-banner/master/StandWithPalestine.svg)](https://techforpalestine.org/learn-more)
+
+[![ReadMeSupportPalestine](https://raw.githubusercontent.com/Safouene1/support-palestine-banner/master/banner-support.svg)](https://techforpalestine.org/learn-more)
 
 ## Usage
 
