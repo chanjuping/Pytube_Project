@@ -1,4 +1,7 @@
 from pytube import YouTube
+from colorama import init, Fore
+
+init(autoreset=True)
 
 def get_user_input():
     url = input('Insert URL: ')
@@ -22,10 +25,10 @@ def download_video(url, quality="highest", destination=""):
 
         # Download the selected stream to the specified destination or the current working directory
         video_stream.download(destination)
-        print('\nDownload success!')
+        print(Fore.GREEN + 'Download success!')
         return True
     except Exception as e:
-        print(f'An error has occurred: {e}\nPlease try again.')
+        print(Fore.RED + f'An error has occurred: {e}\nPlease try again.')
         return False
 
 def show_progress(stream, chunk, file_handle, bytes_remaining):
@@ -43,14 +46,14 @@ def main():
             quit_continue = input('Would you like to continue? (Y)es/(N)o \n> ').lower()
 
             if quit_continue == 'n':
-                print('Thank you for using our program. Have a nice day!')
+                print(Fore.CYAN + 'Thank you for using our program. Have a nice day!')
                 break
             elif quit_continue == 'y':
                 print('')
                 continue
             else:
                 # Handle invalid input
-                print('Invalid input. Please enter either "Y" or "N".\n')
+                print(Fore.YELLOW + 'Invalid input. Please enter either "Y" or "N".\n')
                 continue
 
 if __name__ == "__main__":
