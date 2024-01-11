@@ -11,7 +11,7 @@ clear()
 print(Fore.BLUE + 'PytubePro')
 
 def get_input():
-    return input(Fore.CYAN + '\nYouTube URL: '), input(Fore.CYAN + 'Quality (high/low/720p/1080p, etc.): ')
+    return input(Fore.CYAN + '\nYouTube URL: '), input(Fore.CYAN + '\nQuality (high/low/720p/1080p, etc.): ')
 
 url, quality = get_input()
 
