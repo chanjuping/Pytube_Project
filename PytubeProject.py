@@ -1,3 +1,4 @@
+import os
 from pytube import YouTube
 from colorama import init, Fore
 
@@ -6,10 +7,9 @@ init(autoreset=True)
 def get_user_input():
     url = input(Fore.CYAN + 'Insert URL: ')
     quality_preference = input(Fore.CYAN + 'Enter video quality preference (highest/lowest/720p/1080p, etc.): ')
-    destination = input(Fore.CYAN + 'Enter custom download destination (press Enter for current directory): ')
-    return url, quality_preference, destination
+    return url, quality_preference
 
-def download_video(url, quality="highest", destination=""):
+def download_video(url, quality="highest", folder="PytubeVideos"):
     try:
         youtube = YouTube(url)
         print(f'Downloading link: {url}')
@@ -23,9 +23,12 @@ def download_video(url, quality="highest", destination=""):
         else:
             video_stream = youtube.streams.filter(res=quality).first()
 
+        # Create the folder if it doesn't exist
+        os.makedirs(folder, exist_ok=True)
+
         # Download the selected stream to the specified destination or the current working directory
-        video_stream.download(destination)
-        print(Fore.GREEN + 'Download success!')
+        video_stream.download(folder)
+        print(Fore.GREEN + f'Download success! Saved to {folder}/')
         return True
     except Exception as e:
         print(Fore.RED + f'An error has occurred: {e}\nPlease try again.')
@@ -38,23 +41,11 @@ def show_progress(stream, chunk, file_handle, bytes_remaining):
 
 def main():
     while True:
-        url, quality, custom_destination = get_user_input()
+        url, quality = get_user_input()
 
         # Download video and check if successful
-        if download_video(url, quality, custom_destination):
-            # Ask the user if they want to continue or exit
-            quit_continue = input(Fore.YELLOW + 'Would you like to continue? (Y)es/(N)o \n> ').lower()
-
-            if quit_continue == 'n':
-                print(Fore.CYAN + 'Thank you for using our program. Have a nice day!')
-                break
-            elif quit_continue == 'y':
-                print('')
-                continue
-            else:
-                # Handle invalid input
-                print(Fore.YELLOW + 'Invalid input. Please enter either "Y" or "N".\n')
-                continue
+        if download_video(url, quality):
+            break
 
 if __name__ == "__main__":
     main()
