@@ -10,10 +10,8 @@ def clear():
 clear()
 print(Fore.BLUE + 'PytubePro')
 
-def get_input():
-    return input(Fore.CYAN + '\nYouTube URL: '), input(Fore.CYAN + '\nQuality (high/low/720p/1080p, etc.): ')
-
-url, quality = get_input()
+url = input(Fore.CYAN + '\nYouTube URL: ')
+quality = input(Fore.CYAN + '\nQuality (high/low/720p/1080p, etc.): ')
 
 def download(url, quality="high", folder="PytubeVideos"):
     try:
@@ -33,9 +31,5 @@ def download(url, quality="high", folder="PytubeVideos"):
         print(Fore.RED + f'\nError: {e}\nPlease try again.')
         return False
 
-def main():
-    while not download(url, quality):
-        pass
-
-if __name__ == "__main__":
-    main()
+while not download(url, quality):
+    pass
