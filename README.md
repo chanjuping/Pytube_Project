@@ -12,7 +12,7 @@ PytubePro is a simple Python script designed for effortless YouTube video downlo
 
 ```bash
   git clone https://github.com/daniicode/PytubePro
-  pip install pytube colorama
+  pip install pytube
   cd PytubePro
   python3 pytubepro.py
 ```
