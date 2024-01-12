@@ -6,9 +6,7 @@ def clear():
 
 def download_video(url, quality="high", folder="PytubeVideos"):
     try:
-        yt = YouTube(url)
-        stream = yt.streams.get_highest_resolution() if quality == "high" else yt.streams.filter(res=quality).first() or yt.streams.filter(res="360p").first()
-
+        yt, stream = YouTube(url), YouTube(url).streams.get_highest_resolution() if quality == "high" else YouTube(url).streams.filter(res=quality).first() or YouTube(url).streams.filter(res="360p").first()
         file_name = f"{yt.title.replace(' ', '_')}_{quality}.{stream.subtype}"
         os.makedirs(folder, exist_ok=True)
 
