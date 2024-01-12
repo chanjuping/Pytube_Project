@@ -19,6 +19,7 @@ PytubePro is a simple Python script designed for effortless YouTube video downlo
 
 ## Notes
 
+- The code is highly streamlined.
 - Follow YouTube terms of service.
 
 Enjoy hassle-free YouTube video downloads!
